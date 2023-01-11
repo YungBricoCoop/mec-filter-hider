@@ -3,7 +3,7 @@ This WP Plugin is made to hide some filters from the M.E.C Admin page.
 
 # Installation 
 1. Download the zip file from the **Release page** : 
-https://github.com/YungBricoCoop/mec-filter-hider/releases/tag/v1.0
+https://github.com/YungBricoCoop/mec-filter-hider/releases/
 2. Upload it to WordPress
 3. Activate the plugin
 
