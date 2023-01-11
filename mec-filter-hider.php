@@ -3,7 +3,7 @@
  * Plugin Name: M.E.C. Filter Hider
  * Plugin URI: https://github.com/YungBricoCoop/mec-filter-hider
  * Description: Hide some filters on the Modern Events Calendar plugin
- * Version: 1.0
+ * Version: 1.1
  * Author: Elwan Mayencourt
  */
 
@@ -18,6 +18,19 @@ function mec_f_h_settings_init()
 		__($description, 'mec_f_h'),
 		'mec_f_h_section_cb',
 		'mec_f_h'
+	);
+
+	add_settings_field(
+		'mec_f_h_url_field',
+		__('Url (must contains)', 'mec_f_h'),
+		'mec_f_h_url_field_cb',
+		'mec_f_h',
+		'mec_f_h_section',
+		[
+			'label_for' => 'mec_f_h_url_field',
+			'class' => 'mec_f_h_url_row',
+			'mec_f_h_url_custom_data' => 'custom',
+		]
 	);
 
 	add_settings_field(
@@ -51,8 +64,10 @@ add_action('admin_init', 'mec_f_h_settings_init');
 
 function mec_f_h_section_cb($args)
 {
-	$description = "By default, the plugin displays all the filters.</br>
-	If you want do hide only certain filters, just separate them with a <b>comma</b>.
+	$description = "The url defines the page where the filters are displayed.
+	<b>Don't use the whole url</b> just use for exemple the page name like 'mec'</br>
+	By default, the plugin displays all the filters.</br>
+	If you want to hide only certain filters, just separate them with a <b>comma</b>.
 	</br>For <b>id</b> use <b>#</b> (ex : #name_filter)
 	</br>For <b>class</b> use <b>.</b> (ex : .name_filter)
 	</br>For <b>custom attribut</b> use <b>attribut=</b>value (ex : data-filter=filter_name)
@@ -60,6 +75,14 @@ function mec_f_h_section_cb($args)
 ?>
 	<p id="<?php echo esc_attr($args['id']); ?>"><?php echo $description; ?></p>
 <?php
+}
+
+function mec_f_h_url_field_cb( $args ) {
+    $options = get_option( 'mec_f_h_settings' );
+    $url = isset( $options['mec_f_h_url_field'] ) ? $options['mec_f_h_url_field'] : 'mec';
+    ?>
+    <input type="text" style="width: 400px;" id="<?php echo esc_attr( $args['label_for'] ); ?>" data-custom="<?php echo esc_attr( $args['mec_f_h_url_custom_data'] ); ?>" name="mec_f_h_settings[<?php echo esc_attr( $args['label_for'] ); ?>]" value="<?php echo $url; ?>">
+    <?php
 }
 
 function mec_f_h_container_field_cb( $args ) {
@@ -108,10 +131,12 @@ add_action('admin_menu', 'mec_f_h_menu');
 function mec_f_h_enqueue_scripts()
 {
 	$options = get_option('mec_f_h_settings');
+	$url = $options['mec_f_h_url_field'];
 	$container = $options['mec_f_h_container_field'];
 	$elements = $options['mec_f_h_field'];
 	wp_enqueue_script('mec_f_h_js', plugin_dir_url(__FILE__) . 'mec-f-h.js', array('jquery'), '1.0.0', true);
 	wp_localize_script('mec_f_h_js', 'mec_f_h_vars', array(
+		'url' => $url,
 		'container' => $container,
 		'elements' => $elements,
 	));
