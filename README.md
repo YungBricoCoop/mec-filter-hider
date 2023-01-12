@@ -26,3 +26,10 @@ Its purpose is only to avoid hiding elements on the page other than in itself.
 ## Elements
 
 You can indicate multiple elements just by spliting them with commas.
+
+# Todo
+
+- [ ] Use React/TypeScript/Tailwind
+- [ ] Add the possibility to use it on several pages
+- [ ] Improve UI
+- [ ] Improve doc
